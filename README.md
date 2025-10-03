@@ -1,9 +1,15 @@
 # QMTRY — Lending Club Loan Default Risk Model
 
-[![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)]()
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red.svg)]()
-[![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)]()
+## Executive Summary  
+
+This project developed a deep learning model to predict loan defaults using Lending Club’s 2007–2015 dataset. By combining exploratory data analysis, feature engineering, and PyTorch modeling, the solution addressed class imbalance and achieved meaningful performance on recall and ROC-AUC. The workflow is designed to be reproducible, audit-ready, and adaptable to other domains such as healthcare revenue cycle risk prediction.  
+
+---
+
+![Status](https://img.shields.io/badge/Status-Completed-brightgreen)  
+![Domain](https://img.shields.io/badge/Domain-Finance-blue)  
+![Framework](https://img.shields.io/badge/Framework-PyTorch-red)  
+![Focus](https://img.shields.io/badge/Focus-Imbalanced%20Data%20%7C%20Risk%20Modeling-purple)  
 
 ---
 
