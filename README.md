@@ -85,13 +85,16 @@ All plots saved in `docs/eda/`
 ## Results & Plots
 
 ### Training and Validation Loss
-![Loss Curve](models/loan_default_loss_curve.png)
+![Loss Curve](plots/training/loan_default_loss_curve.png)
 
 ### ROC-AUC Over Epochs
-![ROC-AUC Curve](models/loan_default_roc_curve.png)
+![ROC-AUC Curve](plots/training/loan_default_roc_curve.png)
 
 ### Precision-Recall Curve
-![PR Curve](models/loan_default_pr_curve.png)
+![PR Curve](plots/evaluation/loan_default_pr_curve.png)
+
+### Learning Rate Schedule
+![Learning Rate Curve](plots/training/loan_default_lr_curve.png)
 
 
 ---
