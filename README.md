@@ -1,89 +1,128 @@
-# 📊 QMTRY — Loan Default Risk Model
+# QMTRY — Lending Club Loan Default Risk Model
 
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen.svg)]()
-[![Python](https://img.shields.io/badge/python-3.9%2B-blue.svg)]()
-[![TensorFlow](https://img.shields.io/badge/TensorFlow-2.x-orange.svg)]()
+[![Python](https://img.shields.io/badge/python-3.11%2B-blue.svg)]()
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.x-red.svg)]()
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg)]()
 
 ---
 
-## 📌 Project Overview
-This project applies **deep learning techniques** to predict whether a borrower will **default** on a loan using Lending Club’s historical dataset (2007–2015).
-
-Why it matters:
-- Reduces **loss exposure** by flagging high-risk borrowers  
-- Improves **credit decisioning**  
-- Mirrors **healthcare revenue cycle** risk prediction (default ≈ claim denial/non-payment)
-
-The dataset is **highly imbalanced** (most borrowers repay), making it ideal to demonstrate practical handling of **imbalanced, high-stakes financial/healthcare data**.
+## Project Overview
+This project develops a deep learning classifier to predict whether a Lending Club loan (2007–2015) will default (`not.fully.paid = 1`).  
+It addresses the challenges of highly imbalanced financial datasets, directly applicable to healthcare payment denial prediction.
 
 ---
 
-## 🎯 Objectives
-- Build a **deep learning classifier** for default risk  
-- Apply **class-imbalance strategies** (oversampling, undersampling, SMOTE)  
-- Engineer features for **interpretability & auditability**  
-- Evaluate beyond accuracy (focus on **recall** & **ROC-AUC**)  
-- Produce a **generalizable pipeline** transferable to denial prediction
+## Objectives
+- Perform exploratory data analysis (EDA) to understand the dataset.  
+- Preprocess categorical and numeric features for modeling.  
+- Handle class imbalance with weighted sampling.  
+- Build and train a deep learning model with BatchNorm and Dropout.  
+- Use early stopping and learning rate scheduling.  
+- Evaluate with ROC-AUC, Precision-Recall, Confusion Matrix.  
+- Save artifacts (model, metrics, plots) for reproducibility.  
+- Automatically update this README with the latest results.
 
 ---
 
-## 🏦 Domain Context
-- **Finance** → loan risk modeling, underwriting  
-- **Healthcare Parallel** → denial prediction, payment risk  
-- **Audit-Ready** → reproducible scripts, tracked metrics, explainability
+## Domain Context
+- **Finance:** loan default prediction, credit risk management.  
+- **Healthcare parallel:** denial prediction in revenue cycle.  
+- **Audit-ready:** reproducible `.py` pipelines, tracked metrics, versioned artifacts.
 
 ---
 
-## 📊 Dataset Description
+## Dataset Description
 | Feature            | Description                                                                 |
 |--------------------|-----------------------------------------------------------------------------|
-| `credit.policy`    | 1 if customer meets Lending Club credit criteria, 0 otherwise               |
+| `credit.policy`    | 1 if meets Lending Club underwriting criteria, 0 otherwise                  |
 | `purpose`          | Loan purpose (credit_card, debt_consolidation, educational, etc.)           |
 | `int.rate`         | Interest rate (e.g., 0.11 for 11%)                                          |
 | `installment`      | Monthly loan installment amount                                             |
-| `log.annual.inc`   | Log of self-reported annual income                                          |
+| `log.annual.inc`   | Log of borrower annual income                                               |
 | `dti`              | Debt-to-income ratio                                                        |
-| `fico`             | Borrower FICO score                                                         |
-| `days.with.cr.line`| Number of days borrower has had a credit line                               |
+| `fico`             | FICO credit score                                                           |
+| `days.with.cr.line`| Days borrower has had a credit line                                         |
 | `revol.bal`        | Revolving balance                                                           |
 | `revol.util`       | Revolving utilization rate                                                  |
-| `inq.last.6mths`   | Number of creditor inquiries in last 6 months                               |
-| `delinq.2yrs`      | 30+ day delinquencies in past 2 years                                       |
-| `pub.rec`          | Derogatory public records                                                    |
-| `not.fully.paid`   | **Target** → 1 if loan not fully paid (default), 0 if repaid                |
+| `inq.last.6mths`   | Creditor inquiries in last 6 months                                         |
+| `delinq.2yrs`      | Times 30+ days delinquent in last 2 years                                   |
+| `pub.rec`          | Derogatory public records                                                   |
+| `not.fully.paid`   | Target → 1 if loan not fully paid (default), 0 otherwise                    |
 
 ---
 
-## ⚙️ Methodology
-1. **Ingest & Inspect** → types, nulls, target ratio  
-2. **Clean** → impute/trim, encode categorical (`purpose`)  
-3. **EDA** → distributions, correlations, imbalance visualizations  
-4. **Balance** → oversample/undersample/SMOTE (imbalanced-learn)  
-5. **Engineer** → scaling numeric, one-hot categorical  
-6. **Model** → Keras/TensorFlow DNN for tabular data  
-7. **Evaluate** → Recall, ROC-AUC, confusion matrix, PR curve  
-8. **Explain** → SHAP or permutation importance  
-9. **Package** → save artifacts, seed for reproducibility
+## Methodology
+### Phase 1 – EDA
+- Class balance  
+- Distribution of FICO scores and interest rates  
+- Correlation heatmap  
+All plots saved in `docs/eda/`
+
+### Phase 2 – Preprocessing
+- Encode `purpose` with LabelEncoder  
+- Scale numerical features with StandardScaler  
+- Save processed data to `data/loan_data_processed.csv`
+
+### Phase 3 – Modeling
+- Neural Net with BatchNorm and Dropout  
+- WeightedRandomSampler for imbalance  
+- Optimizer: Adam, Loss: BCELoss  
+- Learning rate schedule: CosineAnnealingLR  
+- Early stopping on validation ROC-AUC
+
+### Phase 4 – Evaluation
+- Metrics: ROC-AUC, Recall, Precision, F1, Confusion Matrix  
+- Curves: ROC and Precision-Recall  
+- Plots saved in `models/`
+
+### Phase 5 – Documentation
+- Training curves (loss, ROC-AUC, LR schedule) generated by `plot_curves.py`  
+- README auto-updated to embed plots
 
 ---
 
-## 🚀 Tech Stack
-- **Python 3.9+**  
-- **Pandas, NumPy** — preprocessing  
-- **Matplotlib, Seaborn** — visualization  
-- **scikit-learn** — transforms, metrics, model utils  
-- **imbalanced-learn** — SMOTE & resampling  
-- **TensorFlow/Keras** — deep learning
+## Results & Plots
+
+### Training and Validation Loss
+![Loss Curve](models/loan_default_loss_curve.png)
+
+### ROC-AUC Over Epochs
+![ROC-AUC Curve](models/loan_default_roc_curve.png)
+
+### Precision-Recall Curve
+![PR Curve](models/loan_default_pr_curve.png)
 
 ---
 
-## 📈 Key Metrics
-- **Recall (Sensitivity)** — priority: catch defaults  
-- **ROC-AUC** — overall separability  
-- **Precision, F1** — balance false positives/negatives  
-- **Confusion Matrix, PR Curve** — error analysis
+## Repository Structure
+
+qmtry-loan-default-risk-model/
+│
+├── data/ # raw & processed datasets
+├── docs/eda/ # EDA plots
+├── models/ # saved model + metrics + plots
+├── notebooks/ # optional Jupyter exploration
+├── src/ # source scripts
+│ ├── eda.py
+│ ├── preprocessing.py
+│ ├── train.py
+│ ├── evaluate.py
+│ ├── plot_curves.py
+│ └── model.py
+│
+├── README.md
+└── requirements.txt
+
 
 ---
 
-## 📂 Repository Structure
+## Deliverables
+- `docs/eda/*.png` → EDA plots  
+- `data/loan_data_processed.csv` → processed dataset  
+- `models/loan_model.pt` → trained PyTorch model  
+- `models/training_log.csv` → per-epoch metrics  
+- `models/loan_default_loss_curve.png`, `loan_default_roc_curve.png`, `loan_default_pr_curve.png` → learning curves  
+
+---
+
